@@ -158,6 +158,10 @@ public class BackgroundGeolocationService extends Service {
             stopForeground(true);
         }
 
+         public void updateNotification(Notification notification) {
+        BackgroundGeolocationService.this.updateNotification(notification);
+        }
+
         void onActivityStopped() {
             Notification notification = getNotification();
             if (notification != null) {
