@@ -184,6 +184,35 @@ public class BackgroundGeolocation extends Plugin {
         call.resolve();
     }
 
+        @PluginMethod()
+public void updateNotification(PluginCall call) {
+    String backgroundTitle = call.getString("backgroundTitle");
+    String backgroundMessage = call.getString("backgroundMessage");
+
+    if (backgroundTitle != null && backgroundMessage != null && service != null) {
+        Notification.Builder builder = new Notification.Builder(getContext())
+            .setContentTitle(backgroundTitle)
+            .setContentText(backgroundMessage)
+            .setOngoing(true)
+            .setPriority(Notification.PRIORITY_HIGH)
+            .setWhen(System.currentTimeMillis());
+
+        // Set the Channel ID for Android O.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            builder.setChannelId(BackgroundGeolocationService.class.getPackage().getName());
+        }
+
+        // Add other necessary settings for the notification
+
+        Notification backgroundNotification = builder.build();
+        service.updateNotification(backgroundNotification);
+        call.resolve();
+    } else {
+        call.reject("Invalid parameters or service not running.");
+    }
+}
+
+
     @PluginMethod()
     public void openSettings(PluginCall call) {
         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
